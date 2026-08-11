@@ -1,0 +1,495 @@
+\documentclass[twoside]{article}
+
+\usepackage[preprint]{aistats2027}
+\usepackage[round,authoryear]{natbib}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{url}
+
+\renewcommand{\bibname}{References}
+\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+\bibliographystyle{apalike}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\E}{\mathbb E}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\1}{\mathbf 1}
+
+\begin{document}
+\runningauthor{}
+
+\twocolumn[
+\aistatstitle{Supplement: Characterizing Perfect Truthfulness in Continuous Online Calibration}
+
+\aistatsauthor{Pahan Dewasurendra}
+
+\aistatsaddress{Johns Hopkins University}
+]
+
+\appendix
+
+\section{Probability Trees and Proper Scores}
+\label{app:notation}
+
+Let $\cA=[k]$ and let $\Delta_k$ be the probability simplex. For depth
+$d$, define the report-tree space
+\begin{equation*}
+ \cR_d=\prod_{t=1}^d\prod_{h\in\cA^{t-1}}\Delta_k.
+\end{equation*}
+We write $r_h\in\Delta_k$ for the report at history $h$. The report tree
+$R\in\cR_d$ induces a law $Q_R$ on $\cA^d$ by
+\begin{equation}
+ Q_R(x)=\prod_{t=1}^d r_{x_{<t},x_t}.
+ \label{eq:supp-tree-law}
+\end{equation}
+On the relative interior $\cR_d^\circ$, this is a bijection between report
+trees and full-support laws on $\cA^d$. Its inverse takes the usual
+conditional probabilities. Both maps are continuous on the relative
+interiors.
+
+A realized-path score has the form
+\begin{equation}
+ S(x,R)=C(x,(r_{x_{<t}})_{t=1}^d).
+ \label{eq:supp-path-score}
+\end{equation}
+Perfect truthfulness means that $S$ is a proper score for the joint law:
+for every law $P$ and every report tree $R$,
+\begin{equation}
+ \E_P S(X,R_P)\leq \E_P S(X,R),
+ \label{eq:supp-joint-proper}
+\end{equation}
+where $R_P$ is any conditional-probability tree representing $P$. Reports
+at histories outside the support of $P$ do not affect either side. On
+full-support laws, $R_P$ is unique.
+
+We use losses, so lower is better. For a finite outcome space $\Omega$, a
+proper loss is a continuous vector map $s:\Delta(\Omega)\to\mathbb R^\Omega$
+such that
+\begin{equation}
+ p\cdot s(p)\leq p\cdot s(q)
+ \quad\text{for all }p,q\in\Delta(\Omega).
+ \label{eq:supp-proper}
+\end{equation}
+Its entropy or Bayes risk is $H_s(p)=p\cdot s(p)$.
+
+\section{Continuous Proper-Score Lemmas}
+\label{app:convex}
+
+For completeness, we prove the two convex-analytic lemmas used in the main
+paper. They hold on any finite outcome space and require only continuity.
+
+\begin{lemma}[Continuous support]
+\label{lem:supp-continuous}
+Let $s:\Delta(\Omega)\to\mathbb R^\Omega$ be continuous and proper. For
+every relative-interior $p$ and every tangent vector $v$ satisfying
+$\1\cdot v=0$,
+\begin{equation}
+ D H_s(p)[v]=v\cdot s(p).
+ \label{eq:supp-directional}
+\end{equation}
+The derivative is continuous in $p$.
+\end{lemma}
+
+\begin{proof}
+Choose $t>0$ small enough that $p+tv$ remains in the relative interior.
+Propriety at truth $p+tv$ with report $p$ gives
+\begin{equation*}
+ H_s(p+tv)\leq(p+tv)\cdot s(p)
+ =H_s(p)+t v\cdot s(p).
+\end{equation*}
+Propriety at truth $p$ with report $p+tv$ gives
+\begin{align*}
+ H_s(p)&\leq p\cdot s(p+tv)\\
+ &=H_s(p+tv)-t v\cdot s(p+tv).
+\end{align*}
+Therefore
+\begin{equation}
+ v\cdot s(p+tv)\leq
+ \frac{H_s(p+tv)-H_s(p)}{t}
+ \leq v\cdot s(p).
+ \label{eq:supp-squeeze}
+\end{equation}
+Letting $t\downarrow0$ and using continuity proves the right directional
+derivative. Replacing $v$ by $-v$ proves the left derivative. The expression
+$v\cdot s(p)$ is continuous in $p$.
+\end{proof}
+
+\begin{corollary}[Entropy uniqueness]
+\label{cor:supp-unique}
+Let $s$ and $u$ be continuous proper losses on a finite outcome space. If
+$H_s(p)-H_u(p)=c$ for every relative-interior $p$, then
+\begin{equation}
+ s_i(p)-u_i(p)=c
+ \quad\text{for every }i,p.
+ \label{eq:supp-unique}
+\end{equation}
+The conclusion extends to the simplex boundary.
+The componentwise conclusion on the relative interior requires only that the
+scores be continuous and proper when truths and reports are restricted to the
+relative interior.
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:supp-continuous} gives
+$v\cdot(s(p)-u(p))=0$ for every tangent vector $v$. Hence
+$s(p)-u(p)=\lambda(p)\1$. Taking the inner product with $p$ shows
+$\lambda(p)=c$. Continuity extends the identity to the boundary.
+\end{proof}
+
+\begin{lemma}[Shared component]
+\label{lem:supp-shared}
+Let $s$ and $u$ be continuous proper losses on $\Delta_k$. Fix $i\in[k]$.
+If
+\begin{equation*}
+ s_j(q)=u_j(q)\quad\text{for every }j\ne i\text{ and }q\in\Delta_k,
+\end{equation*}
+then $s_i(q)-u_i(q)$ is constant in $q$.
+\end{lemma}
+
+\begin{proof}
+Work first in the relative interior. Set
+$d(q)=s_i(q)-u_i(q)$ and
+\begin{equation*}
+ F(q)=H_s(q)-H_u(q)=q_i d(q).
+\end{equation*}
+By Lemma~\ref{lem:supp-continuous}, for every tangent vector $v$,
+\begin{equation}
+ D F(q)[v]=v\cdot(s(q)-u(q))=v_i d(q).
+ \label{eq:supp-shared-gradient}
+\end{equation}
+If $v_i=0$, the derivative is zero. Each relative-interior slice with fixed
+$q_i=z$ is connected, so $F(q)=f(z)$ for some continuously differentiable
+function $f:(0,1)\to\mathbb R$.
+
+Choose any $j\ne i$ and move in direction $e_i-e_j$. Equation
+\eqref{eq:supp-shared-gradient} gives
+\begin{equation*}
+ f'(z)=d(q)=\frac{f(z)}{z}.
+\end{equation*}
+Thus $(f(z)/z)'=0$, so $f(z)=cz$ and $d(q)=c$. Continuity extends the result
+to the boundary.
+\end{proof}
+
+\section{Proof of the Path-Score Characterization}
+\label{app:structure}
+
+We restate the representation in report-tree notation.
+
+\begin{theorem}[Path-score characterization]
+\label{thm:supp-structure}
+Let $C$ be a continuous realized-path score of depth $d$ on a finite alphabet.
+It is proper for every law on $\cA^d$ if and only if there are continuous
+proper one-step losses $\ell_h$ such that
+\begin{equation}
+ C(x,(r_{x_{<t}})_t)=\sum_{t=1}^d
+ \ell_{x_{<t}}(x_t,r_{x_{<t}}).
+ \label{eq:supp-additive}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The reverse implication follows from iterated conditioning and one-step
+propriety. We prove the forward implication by induction on $d$. The claim is
+immediate for $d=1$.
+
+Assume the claim through depth $d-1$ and consider a depth-$d$ score. We first
+work with interior root reports and full-support continuation laws. Fix an
+interior root report $q\in\Delta_k^\circ$. For root outcome $i$, define the
+continuation score
+\begin{equation}
+ C_i^q(z,R)=C(iz,(q,(r_{z_{<t}})_t)),
+ \label{eq:supp-cont-score}
+\end{equation}
+where $z\in\cA^{d-1}$ and $R\in\cR_{d-1}$. The index alignment in
+\eqref{eq:supp-cont-score} is only notational: $R$ supplies every report after
+the root on branch $i$.
+
+For fixed $q$, $C_i^q$ is proper for every continuation law $P_i$. To verify
+this, construct a joint law whose truthful root report is $q$, whose branch
+$i$ continuation is $P_i$, and whose other continuations are arbitrary and
+full support. Compare the truthful tree with a tree that changes only the
+continuation reports in branch $i$. Joint propriety gives the continuation
+properness inequality multiplied by $q_i>0$.
+
+Let
+\begin{equation}
+ B_i(q,P_i)=\E_{Z\sim P_i}C_i^q(Z,R_{P_i})
+ \label{eq:supp-branch-bayes}
+\end{equation}
+be the continuation Bayes risk. Fix a tuple of full-support continuation laws
+$P=(P_1,\ldots,P_k)$. The vector
+\begin{equation*}
+ B(q,P)=(B_1(q,P_1),\ldots,B_k(q,P_k))
+\end{equation*}
+is a continuous proper root loss. Indeed, for a true root law $p$, compare
+the fully truthful report tree with a tree that reports $q$ at the root and
+reports every continuation $P_i$ truthfully. Joint propriety gives
+\begin{equation*}
+ \sum_i p_iB_i(p,P_i)\leq\sum_i p_iB_i(q,P_i).
+\end{equation*}
+
+Fix reference continuation laws $P_i^0$ and an interior reference root report
+$q^0$. If $P_i$ changes while every other continuation stays fixed, the two
+proper root losses agree in every component except $i$. By
+Lemma~\ref{lem:supp-shared},
+\begin{equation*}
+ B_i(q,P_i)-B_i(q,P_i^0)
+\end{equation*}
+is independent of $q$. Define
+\begin{align}
+ A_i(q)&=B_i(q,P_i^0),\notag\\
+ K_i(P_i)&=B_i(q^0,P_i)-B_i(q^0,P_i^0).
+ \label{eq:supp-AK}
+\end{align}
+Then
+\begin{equation}
+ B_i(q,P_i)=A_i(q)+K_i(P_i).
+ \label{eq:supp-bayes-separate}
+\end{equation}
+
+The vector $A(q)=(A_i(q))_{i=1}^k$ is a proper root loss. For any fixed
+continuation tuple $P$, the proper loss $B(q,P)$ differs from $A(q)$ by the
+outcome-dependent constant vector $(K_i(P_i))_i$. Such constants cancel from
+the properness comparison at a fixed true root law.
+
+It remains to separate the full continuation score, not only its Bayes risk.
+For fixed $i$ and root reports $q,q^0$, both $C_i^q$ and $C_i^{q^0}$ are
+continuous proper scores on the finite outcome space $\cA^{d-1}$. Under the
+bijection in \eqref{eq:supp-tree-law}, their entropies at a full-support
+continuation law $P_i$ are $B_i(q,P_i)$ and $B_i(q^0,P_i)$. By
+\eqref{eq:supp-bayes-separate}, their difference is the constant
+$A_i(q)-A_i(q^0)$. The interior version of
+Corollary~\ref{cor:supp-unique} gives
+\begin{equation}
+ C_i^q(z,R)=C_i^{q^0}(z,R)+A_i(q)-A_i(q^0)
+ \label{eq:supp-score-separate}
+\end{equation}
+for every full-support continuation report tree $R$ and every $z$.
+
+Define
+\begin{equation*}
+ D_i(z,R)=C_i^{q^0}(z,R)-A_i(q^0).
+\end{equation*}
+Then $C_i^q(z,R)=A_i(q)+D_i(z,R)$. The score $D_i$ is continuous,
+realized-path local, and proper on every depth-$(d-1)$ continuation law.
+Apply the induction hypothesis to each $D_i$. Together with the proper root
+loss $A$, this gives \eqref{eq:supp-additive} for interior reports.
+
+Interior report trees are dense in $\cR_d$. Every term and the original
+score are continuous, so the identity extends to all boundary reports. The
+properness inequalities for the component losses also extend to boundary
+true laws and reports by continuity.
+\end{proof}
+
+\section{Normalization and Risk Comparison}
+\label{app:risk}
+
+\begin{corollary}[Canonical normalization]
+\label{cor:supp-normalize}
+Suppose the score in Theorem~\ref{thm:supp-structure} satisfies
+\begin{equation}
+ C(x,(e_{x_t})_{t=1}^d)=0\quad\text{for every }x\in\cA^d.
+ \label{eq:supp-endpoint}
+\end{equation}
+Then the components can be chosen to satisfy
+\begin{equation*}
+ \ell_h(i,e_i)=0,\qquad \ell_h(i,q)\geq0.
+\end{equation*}
+\end{corollary}
+
+\begin{proof}
+Starting from any representation, define
+\begin{equation*}
+ \widetilde\ell_h(i,q)=\ell_h(i,q)-\ell_h(i,e_i).
+\end{equation*}
+Subtracting an outcome-dependent constant preserves propriety. Propriety at
+the deterministic truth $e_i$ gives
+$\ell_h(i,e_i)\leq\ell_h(i,q)$, so every normalized loss is nonnegative.
+Finally, for each path $x$,
+\begin{equation*}
+ \sum_{t=1}^d\ell_{x_{<t}}(x_t,e_{x_t})
+ =C(x,(e_{x_t})_t)=0.
+\end{equation*}
+Thus replacing every component by its normalized version leaves $C$ exactly
+unchanged.
+\end{proof}
+
+\begin{lemma}[One-step comparison]
+\label{lem:supp-one-step}
+Let $\ell$ be a nonnegative proper categorical loss normalized at every
+simplex vertex. For interior $p,q\in\Delta_k$, define
+\begin{align*}
+ H(p)&=\sum_i p_i\ell(i,p),\\
+ L(p,q)&=\sum_i p_i\ell(i,q).
+\end{align*}
+Then
+\begin{equation}
+ L(p,q)\leq
+ \left(\max_i\frac{p_i}{q_i}\right)
+ \left(\max_i\frac{q_i}{p_i}\right)H(p).
+ \label{eq:supp-one-step}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Nonnegativity gives
+\begin{equation*}
+ L(p,q)\leq\left(\max_i\frac{p_i}{q_i}\right)
+ \sum_i q_i\ell(i,q).
+\end{equation*}
+Properness at truth $q$ gives
+\begin{equation*}
+ \sum_i q_i\ell(i,q)\leq\sum_i q_i\ell(i,p).
+\end{equation*}
+A second use of nonnegativity gives
+\begin{equation*}
+ \sum_i q_i\ell(i,p)
+ \leq\left(\max_i\frac{q_i}{p_i}\right)H(p).
+\end{equation*}
+Multiplying the factors proves the claim.
+\end{proof}
+
+\begin{theorem}[Sequential comparison]
+\label{thm:supp-ratio}
+Let $C_T$ be continuous, perfectly truthful, and satisfy
+\eqref{eq:supp-endpoint}. For interior $p,q\in\Delta_k$ and i.i.d. outcomes
+$X_t\sim p$,
+\begin{equation}
+ \E_p C_T(X,q\1_T)\leq\kappa(p,q)\E_p C_T(X,p\1_T),
+ \label{eq:supp-sequential-ratio}
+\end{equation}
+where
+\begin{equation*}
+ \kappa(p,q)=\left(\max_i\frac{p_i}{q_i}\right)
+             \left(\max_i\frac{q_i}{p_i}\right).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+Use the normalized components from Corollary~\ref{cor:supp-normalize}. At
+each history $h$, Lemma~\ref{lem:supp-one-step} applies to $\ell_h$. Under
+i.i.d. truth $p$, the conditional law of $X_t$ given $X_{<t}=h$ is $p$.
+Therefore
+\begin{align*}
+ &\E_p[\ell_{X_{<t}}(X_t,q)\mid X_{<t}]\\
+ &\qquad\leq\kappa(p,q)
+ \E_p[\ell_{X_{<t}}(X_t,p)\mid X_{<t}].
+\end{align*}
+Take expectations and sum over $t$.
+\end{proof}
+
+For binary $p=(1-a,a)$ and $q=(1-b,b)$, if $b>a$ then
+\begin{align*}
+ \max_i\frac{p_i}{q_i}&=\frac{1-a}{1-b},\\
+ \max_i\frac{q_i}{p_i}&=\frac{b}{a}.
+\end{align*}
+Their product is $b(1-a)/(a(1-b))$. The case $b<a$ gives its reciprocal.
+Thus
+\begin{equation}
+ \kappa(p,q)=
+ \exp\!\left(|\operatorname{logit}(a)-\operatorname{logit}(b)|\right).
+ \label{eq:supp-binary-kappa}
+\end{equation}
+
+\section{Sharpness of the Binary Constant}
+\label{app:sharpness}
+
+We give a direct construction rather than invoke the full representation
+theory of binary proper losses. Let $w:[0,1]\to\mathbb R_{\geq0}$ be a
+continuous density. Define
+\begin{align}
+ \ell(0,q)&=\int_0^q t w(t)\,dt,\label{eq:supp-binary-loss0}\\
+ \ell(1,q)&=\int_q^1 (1-t)w(t)\,dt.
+ \label{eq:supp-binary-loss1}
+\end{align}
+The losses are continuous, nonnegative, and normalized at $q=0$ and $q=1$.
+For truth $a$, differentiation of the cross-risk gives
+\begin{equation*}
+ \frac{d}{dq}\left((1-a)\ell(0,q)+a\ell(1,q)\right)
+ =(q-a)w(q).
+\end{equation*}
+Hence the loss is proper.
+
+Fix $b>a$. Choose a sequence of continuous unit-mass densities $w_n$
+supported inside $(a,b)$ and concentrating at $b$ from below. Since all mass
+lies above $a$ and below $b$,
+\begin{align*}
+ L_n(a,a)&=a\int_a^b(1-t)w_n(t)\,dt,\\
+ L_n(a,b)&=(1-a)\int_a^b t w_n(t)\,dt.
+\end{align*}
+Therefore
+\begin{equation*}
+ \frac{L_n(a,b)}{L_n(a,a)}
+ \longrightarrow\frac{b(1-a)}{a(1-b)}=\kappa(p,q).
+\end{equation*}
+For $b<a$, choose densities supported inside $(b,a)$ and concentrating at
+$b$ from above. Then
+\begin{align*}
+ L_n(a,a)&=(1-a)\int_b^a t w_n(t)\,dt,\\
+ L_n(a,b)&=a\int_b^a(1-t)w_n(t)\,dt,
+\end{align*}
+and the ratio approaches $a(1-b)/(b(1-a))$. This proves the sharpness claim
+for every $\epsilon>0$.
+
+\section{Batch ATB and Its Online Deviation}
+\label{app:atb}
+
+For completeness, define the empirical Averaged Two-Bin calibration error
+of \citet{hartline2026perfect} by
+\begin{align}
+ \operatorname{ATB}_T(r,x)
+ &=\frac{1}{T^2}\int_0^1\Bigg[
+ \left(\sum_{t:r_t<z}(r_t-x_t)\right)^2\notag\\
+ &\qquad+
+ \left(\sum_{t:r_t\geq z}(r_t-x_t)\right)^2\Bigg]dz.
+ \label{eq:supp-atb}
+\end{align}
+The choice of strict inequality at the threshold is immaterial under the
+integral.
+
+If $r=b\1_T$, all reports occupy one bin for almost every $z$. Hence
+\begin{equation*}
+ \operatorname{ATB}_T(b\1_T,x)
+ =\frac{1}{T^2}\left(\sum_{t=1}^T(b-x_t)\right)^2.
+\end{equation*}
+For i.i.d. $X_t\sim\operatorname{Ber}(a)$, bias and variance give
+\begin{equation}
+ \E_a\operatorname{ATB}_T(b\1_T,X)
+ =(b-a)^2+\frac{a(1-a)}{T}.
+ \label{eq:supp-atb-expectation}
+\end{equation}
+Setting $b=a$ yields truthful expected ATB $a(1-a)/T$.
+
+We next verify the two-round online deviation in the main paper. Let
+$a=1/2$, set $R_1=1/2$, and set $R_2=1/4$ after $X_1=0$ or $R_2=3/4$
+after $X_1=1$. Integrating \eqref{eq:supp-atb} over the intervals induced by
+the two reports gives the following table.
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$X_1X_2$ & $(R_1,R_2)$ & $\operatorname{ATB}_2$\\
+\midrule
+$00$ & $(1/2,1/4)$ & $1/8$\\
+$01$ & $(1/2,1/4)$ & $1/16$\\
+$10$ & $(1/2,3/4)$ & $1/16$\\
+$11$ & $(1/2,3/4)$ & $1/8$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The outcomes are equiprobable, so the adaptive expected loss is
+\begin{equation*}
+ \frac14\left(\frac18+\frac1{16}+\frac1{16}+\frac18\right)
+ =\frac3{32}.
+\end{equation*}
+For truthful constant reports, \eqref{eq:supp-atb-expectation} with $T=2$
+gives $1/8$. Thus the adaptive reports strictly improve on truth.
+
+\bibliography{references}
+
+\end{document}
