@@ -36,88 +36,30 @@
 ]
 
 \begin{abstract}
-Recent work asks whether a sequential calibration measure can be perfectly
-truthful, complete, and sound. Additive proper losses are perfectly truthful
-but not complete. Subsampled calibration errors are complete and sound but
-only approximately truthful. We prove that this gap is unavoidable for every
-continuous measure that observes only the realized forecast path.
+Recent work asks whether a sequential calibration measure can be perfectly truthful, complete, and sound. Additive proper losses are perfectly truthful but not complete. Subsampled calibration errors are complete and sound but only approximately truthful. We prove that this gap is unavoidable for every continuous measure that observes only the realized forecast path.
 
-Our main result characterizes all such perfectly truthful measures on any
-finite outcome alphabet. Every one is a sum of one-step proper losses, with a
-possibly different loss at each history. If the measure vanishes on every
-perfect deterministic forecast, these losses admit a nonnegative canonical
-normalization. This yields a finite-sample comparison: under i.i.d. truth
-$p$, the expected loss of a constant report $q$ is at most
-$\kappa(p,q)$ times truthful loss, where
-$\kappa(p,q)=(\max_i p_i/q_i)(\max_i q_i/p_i)$. For binary outcomes this is
-the odds ratio, and the constant is sharp. Completeness makes truthful loss
-sublinear, so the comparison contradicts the linear wrong-report loss
-required by soundness. In contrast, a recent perfectly truthful batch measure
-has a loss ratio that grows linearly with sample size. The result therefore
-identifies a strict batch versus online boundary for exact truthful
-calibration.
+Our main result characterizes all such perfectly truthful measures on any finite outcome alphabet. Every one is a sum of one-step proper losses, with a possibly different loss at each history. If the measure vanishes on every perfect deterministic forecast, these losses admit a nonnegative canonical normalization. This yields a finite-sample comparison: under i.i.d. truth $p$, the expected loss of a constant report $q$ is at most $\kappa(p,q)$ times truthful loss, where $\kappa(p,q)=(\max_i p_i/q_i)(\max_i q_i/p_i)$. For binary outcomes this is the odds ratio, and the constant is sharp. Completeness makes truthful loss sublinear, so the comparison contradicts the linear wrong-report loss required by soundness. In contrast, a recent perfectly truthful batch measure has a loss ratio that grows linearly with sample size. The result therefore identifies a strict batch versus online boundary for exact truthful calibration.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
 
-Calibration measures evaluate whether probabilistic forecasts are reliable.
-In sequential prediction, a forecaster reports a probability before each
-outcome is revealed. A measure is \emph{truthful} if the forecaster minimizes
-expected penalty by reporting the true conditional probability. This
-incentive requirement is logically separate from the usual statistical
-requirements. \emph{Completeness} asks that correct forecasts have sublinear
-penalty. \emph{Soundness} asks that a fixed wrong report have linear penalty.
+Calibration measures evaluate whether probabilistic forecasts are reliable. In sequential prediction, a forecaster reports a probability before each outcome is revealed. A measure is \emph{truthful} if the forecaster minimizes expected penalty by reporting the true conditional probability. This incentive requirement is logically separate from the usual statistical requirements. \emph{Completeness} asks that correct forecasts have sublinear penalty. \emph{Soundness} asks that a fixed wrong report have linear penalty.
 
-\citet{haghtalab2024truthfulness} formalized these three requirements. They
-showed that standard calibration errors can be manipulated, while sums of
-proper scoring rules are perfectly truthful but incomplete. Their Subsampled
-Smooth Calibration Error (SSCE) is the first complete and sound measure whose
-truthful loss is within a universal constant of optimum. They left open
-whether the factor can be one. Subsequent work obtained approximate
-truthfulness with decision-theoretic guarantees
-\citep{qiao2025decision}. In a different batch protocol, where all reports
-precede independent outcomes, \citet{hartline2026perfect} recently constructed
-the perfectly truthful Averaged Two-Bin calibration error (ATB). Its
-multiclass extensions are also perfectly truthful
-\citep{lu2025multiclass}.
+\citet{haghtalab2024truthfulness} formalized these three requirements. They showed that standard calibration errors can be manipulated, while sums of proper scoring rules are perfectly truthful but incomplete. Their Subsampled Smooth Calibration Error (SSCE) is the first complete and sound measure whose truthful loss is within a universal constant of optimum. They left open whether the factor can be one. Subsequent work obtained approximate truthfulness with decision-theoretic guarantees \citep{qiao2025decision}. In a different batch protocol, where all reports precede independent outcomes, \citet{hartline2026perfect} recently constructed the perfectly truthful Averaged Two-Bin calibration error (ATB). Its multiclass extensions are also perfectly truthful \citep{lu2025multiclass}.
 
-This paper resolves the sequential question under one natural regularity
-condition. A calibration measure receives the realized outcomes and realized
-reports. It does not receive the forecaster's counterfactual reports at
-histories that did not occur. We call this \emph{realized-path locality}.
-This is the standard interface of an online calibration measure. We assume
-only that the reported loss is continuous in the reports. All continuous
-calibration measures considered in the recent truthfulness literature,
-including smooth calibration, distance-based measures, SSCE, and ATB, obey
-this condition.
+This paper resolves the sequential question under one natural regularity condition. A calibration measure receives the realized outcomes and realized reports. It does not receive the forecaster's counterfactual reports at histories that did not occur. We call this \emph{realized-path locality}. This is the standard interface of an online calibration measure. We assume only that the reported loss is continuous in the reports. All continuous calibration measures considered in the recent truthfulness literature, including smooth calibration, distance-based measures, SSCE, and ATB, obey this condition.
 
-Our first contribution is a representation theorem. Fix any finite horizon
-and any finite outcome alphabet. Every continuous, perfectly truthful,
-realized-path-local loss has the form
+Our first contribution is a representation theorem. Fix any finite horizon and any finite outcome alphabet. Every continuous, perfectly truthful, realized-path-local loss has the form
 \begin{equation}
  C_T(x,r)=\sum_{t=1}^T \ell_{x_{<t}}(x_t,r_t),
  \label{eq:additive-intro}
 \end{equation}
-where each $\ell_h$ is a proper categorical loss. The loss can depend on the
-full history and on the horizon. Thus the theorem does not assume temporal
-homogeneity, separability, strict truthfulness, or differentiability.
-Additive proper scoring is not merely one way to obtain exact online
-truthfulness. Subject to continuity, it is the only way.
+where each $\ell_h$ is a proper categorical loss. The loss can depend on the full history and on the horizon. Thus the theorem does not assume temporal homogeneity, separability, strict truthfulness, or differentiability. Additive proper scoring is not merely one way to obtain exact online truthfulness. Subject to continuity, it is the only way.
 
-The proof views a report policy as a conditional-probability tree. Fixing the
-root report leaves a proper score on each continuation subtree. The Bayes
-risks of those continuation scores must themselves form a proper categorical
-score at the root. A new shared-component lemma shows that varying one
-continuation law can change its root component only by a constant. Uniqueness
-of a continuous proper score from its entropy then removes every interaction
-between the root report and continuation reports. Induction gives
-\eqref{eq:additive-intro}.
+The proof views a report policy as a conditional-probability tree. Fixing the root report leaves a proper score on each continuation subtree. The Bayes risks of those continuation scores must themselves form a proper categorical score at the root. A new shared-component lemma shows that varying one continuation law can change its root component only by a constant. Uniqueness of a continuous proper score from its entropy then removes every interaction between the root report and continuation reports. Induction gives \eqref{eq:additive-intro}.
 
-Our second contribution is a quantitative consequence that rules out useful
-perfect truthfulness. If $C_T(x,x)=0$, the terms in
-\eqref{eq:additive-intro} can be normalized to be nonnegative. For interior
-categorical distributions $p,q$, define
+Our second contribution is a quantitative consequence that rules out useful perfect truthfulness. If $C_T(x,x)=0$, the terms in \eqref{eq:additive-intro} can be normalized to be nonnegative. For interior categorical distributions $p,q$, define
 \begin{equation}
  \kappa(p,q)=\left(\max_i\frac{p_i}{q_i}\right)
              \left(\max_i\frac{q_i}{p_i}\right).
@@ -134,55 +76,32 @@ In the binary case, with $p=(1-a,a)$ and $q=(1-b,b)$,
  \kappa(p,q)=
  \exp\!\left(|\operatorname{logit}(a)-\operatorname{logit}(b)|\right).
 \end{equation}
-This factor is independent of $T$ and is sharp over continuous proper binary
-losses. Completeness makes the right side of \eqref{eq:ratio-intro} $o(T)$.
-Soundness requires the left side to be $\Omega(T)$ for every $p\ne q$. The
-two requirements are incompatible.
+This factor is independent of $T$ and is sharp over continuous proper binary losses. Completeness makes the right side of \eqref{eq:ratio-intro} $o(T)$. Soundness requires the left side to be $\Omega(T)$ for every $p\ne q$. The two requirements are incompatible.
 
-The result is specific to exact incentives. SSCE achieves constant-factor
-truthfulness because it need not satisfy the structure theorem. It is also
-specific to the online information pattern. For constant reports under
-i.i.d. Bernoulli outcomes, batch ATB has truthful expected loss of order
-$1/T$ and wrong-report loss of constant order. Their ratio grows as $T$.
-Equation~\eqref{eq:ratio-intro} proves that no continuous exact online
-measure can reproduce this separation. We also give a two-round adaptive
-deviation that lowers expected ATB, showing directly where batch truthfulness
-breaks online.
+The result is specific to exact incentives. SSCE achieves constant-factor truthfulness because it need not satisfy the structure theorem. It is also specific to the online information pattern. For constant reports under i.i.d. Bernoulli outcomes, batch ATB has truthful expected loss of order $1/T$ and wrong-report loss of constant order. Their ratio grows as $T$. Equation~\eqref{eq:ratio-intro} proves that no continuous exact online measure can reproduce this separation. We also give a two-round adaptive deviation that lowers expected ATB, showing directly where batch truthfulness breaks online.
 
 \section{Protocol and Axioms}
 \label{sec:setting}
 
-We first use binary outcomes to match the definitions of
-\citet{haghtalab2024truthfulness}. At round $t\in[T]$, a forecaster observes
-$x_{<t}\in\{0,1\}^{t-1}$, reports $r_t\in[0,1]$, and then observes
-$x_t\in\{0,1\}$. A deterministic forecaster is a report tree
-$R=(r_h)_{h\in\cup_{t=1}^T\{0,1\}^{t-1}}$. A calibration measure is a family
-of maps
+We first use binary outcomes to match the definitions of \citet{haghtalab2024truthfulness}. At round $t\in[T]$, a forecaster observes $x_{<t}\in\{0,1\}^{t-1}$, reports $r_t\in[0,1]$, and then observes $x_t\in\{0,1\}$. A deterministic forecaster is a report tree $R=(r_h)_{h\in\cup_{t=1}^T\{0,1\}^{t-1}}$. A calibration measure is a family of maps
 \begin{equation*}
  C_T:\{0,1\}^T\times[0,1]^T\longrightarrow[0,T].
 \end{equation*}
-On outcome path $x$, it incurs $C_T(x,(r_{x_{<t}})_{t=1}^T)$. This is
-realized-path locality: the score depends on the reports encountered on $x$,
-not on reports at unrealized histories. We say $C_T$ is continuous if
-$C_T(x,\cdot)$ is continuous for every $x$.
+On outcome path $x$, it incurs $C_T(x,(r_{x_{<t}})_{t=1}^T)$. This is realized-path locality: the score depends on the reports encountered on $x$, not on reports at unrealized histories. We say $C_T$ is continuous if $C_T(x,\cdot)$ is continuous for every $x$.
 
 For a law $P$ on $\{0,1\}^T$, a truthful report tree is
 \begin{equation*}
  p_h=P(X_t=1\mid X_{<t}=h),\qquad |h|=t-1.
 \end{equation*}
-Values at zero-probability histories are immaterial. The measure is
-\emph{perfectly truthful} if for every $P$ and every report tree $R$,
+Values at zero-probability histories are immaterial. The measure is \emph{perfectly truthful} if for every $P$ and every report tree $R$,
 \begin{equation}
  \E_P C_T(X,(p_{X_{<t}})_t)
  \leq \E_P C_T(X,(r_{X_{<t}})_t).
  \label{eq:truth}
 \end{equation}
-This is exactly $(1,0)$-truthfulness in Definition 2.5 of
-\citet{haghtalab2024truthfulness}. Randomized forecasters do not alter the
-minimum because their expected loss is an average over deterministic trees.
+This is exactly $(1,0)$-truthfulness in Definition 2.5 of \citet{haghtalab2024truthfulness}. Randomized forecasters do not alter the minimum because their expected loss is an average over deterministic trees.
 
-For completeness and soundness we also adopt their definitions.
-Completeness requires
+For completeness and soundness we also adopt their definitions. Completeness requires
 \begin{align}
  C_T(x,x)&=0 &&\text{for every }x, \label{eq:endpoint}\\
  \E_{X\sim\operatorname{Ber}(a)^T}C_T(X,a\1_T)&=o_a(T)
@@ -195,14 +114,9 @@ Soundness requires, in particular,
  \quad\text{for every }a\ne b.
  \label{eq:sound}
 \end{equation}
-Their definition has an additional deterministic opposite-report condition.
-Our impossibility does not need it. We also do not assume that an adversarial
-online algorithm can achieve sublinear $C_T$.
+Their definition has an additional deterministic opposite-report condition. Our impossibility does not need it. We also do not assume that an adversarial online algorithm can achieve sublinear $C_T$.
 
-The representation result is cleaner for a finite alphabet
-$\cA=[k]$. Write $\Delta_k$ for its probability simplex and $e_i$ for its
-$i$th vertex. Reports are $r_t\in\Delta_k$. A one-step loss
-$\ell:\cA\times\Delta_k\to\mathbb R$ is proper if
+The representation result is cleaner for a finite alphabet $\cA=[k]$. Write $\Delta_k$ for its probability simplex and $e_i$ for its $i$th vertex. Reports are $r_t\in\Delta_k$. A one-step loss $\ell:\cA\times\Delta_k\to\mathbb R$ is proper if
 \begin{equation}
  \sum_i p_i\ell(i,p)\leq\sum_i p_i\ell(i,q)
  \quad\text{for all }p,q\in\Delta_k.
@@ -212,16 +126,11 @@ $\ell:\cA\times\Delta_k\to\mathbb R$ is proper if
 \section{All Continuous Truthful Path Losses Are Additive}
 \label{sec:structure}
 
-We now state the central characterization. Complete proofs appear in the
-supplement.
+We now state the central characterization. Complete proofs appear in the supplement.
 
 \begin{theorem}[Path-score characterization]
 \label{thm:structure}
-Fix a finite alphabet $\cA=[k]$ and a horizon $T$. A continuous
-realized-path-local loss $C_T$ is perfectly truthful for every law on
-$\cA^T$ if and only if there are continuous proper losses
-$\ell_h:\cA\times\Delta_k\to\mathbb R$, one for every history
-$h\in\cup_{t=1}^T\cA^{t-1}$, such that
+Fix a finite alphabet $\cA=[k]$ and a horizon $T$. A continuous realized-path-local loss $C_T$ is perfectly truthful for every law on $\cA^T$ if and only if there are continuous proper losses $\ell_h:\cA\times\Delta_k\to\mathbb R$, one for every history $h\in\cup_{t=1}^T\cA^{t-1}$, such that
 \begin{equation}
  C_T(x,r_{1:T})=\sum_{t=1}^T
  \ell_{x_{<t}}(x_t,r_t).
@@ -232,102 +141,65 @@ The component losses may depend on $T$ and $h$.
 
 \begin{corollary}[Bayes-risk chain rule]
 \label{cor:chain}
-Let $P$ have conditional distributions $p_h$ and let
-$H_h(p)=\sum_i p_i\ell_h(i,p)$ be the entropy of the component at history
-$h$. The truthful expected score satisfies
+Let $P$ have conditional distributions $p_h$ and let $H_h(p)=\sum_i p_i\ell_h(i,p)$ be the entropy of the component at history $h$. The truthful expected score satisfies
 \begin{equation}
  \E_P C_T(X,(p_{X_{<t}})_t)
  =\sum_{t=1}^T\E_P H_{X_{<t}}(p_{X_{<t}}).
  \label{eq:chain}
 \end{equation}
-Thus a continuous truthful path score has no cross-time interaction even in
-its Bayes risk.
+Thus a continuous truthful path score has no cross-time interaction even in its Bayes risk.
 \end{corollary}
 
-The reverse direction follows by conditioning at every history. We outline
-the nontrivial direction. Two elementary facts about continuous proper scores
-drive the proof.
+The reverse direction follows by conditioning at every history. We outline the nontrivial direction. Two elementary facts about continuous proper scores drive the proof.
 
-For a proper loss vector $s(q)=(s_i(q))_{i=1}^k$, its entropy is
-$H(q)=q\cdot s(q)$. Propriety says that $s(q)$ is a supporting affine loss
-for the concave function $H$. Continuity removes ambiguity in this support.
+For a proper loss vector $s(q)=(s_i(q))_{i=1}^k$, its entropy is $H(q)=q\cdot s(q)$. Propriety says that $s(q)$ is a supporting affine loss for the concave function $H$. Continuity removes ambiguity in this support.
 
 \begin{lemma}[Continuous support and uniqueness]
 \label{lem:unique}
-Let $s:\Delta_k\to\mathbb R^k$ be a continuous proper loss. On the relative
-interior of $\Delta_k$, $H(q)=q\cdot s(q)$ is continuously differentiable
-along the simplex and
+Let $s:\Delta_k\to\mathbb R^k$ be a continuous proper loss. On the relative interior of $\Delta_k$, $H(q)=q\cdot s(q)$ is continuously differentiable along the simplex and
 \begin{equation}
  D H(q)[v]=v\cdot s(q)\qquad\text{whenever }\1\cdot v=0.
  \label{eq:entropy-gradient}
 \end{equation}
-Consequently, two continuous proper losses with entropies differing by a
-constant $c$ differ componentwise by $c$.
+Consequently, two continuous proper losses with entropies differing by a constant $c$ differ componentwise by $c$.
 \end{lemma}
 
-To see \eqref{eq:entropy-gradient}, apply propriety twice to $q$ and $q+tv$:
-for $t>0$,
+To see \eqref{eq:entropy-gradient}, apply propriety twice to $q$ and $q+tv$: for $t>0$,
 \begin{equation*}
  v\cdot s(q+tv)\leq
  \frac{H(q+tv)-H(q)}{t}\leq v\cdot s(q).
 \end{equation*}
-Continuity squeezes the directional derivative. This short argument is why
-we need no differentiability assumption.
+Continuity squeezes the directional derivative. This short argument is why we need no differentiability assumption.
 
 \begin{lemma}[Shared component]
 \label{lem:shared}
-Let $s$ and $u$ be continuous proper losses on $\Delta_k$. If
-$s_j(q)=u_j(q)$ for every $j\ne i$ and every $q$, then
-$s_i(q)-u_i(q)$ is constant in $q$.
+Let $s$ and $u$ be continuous proper losses on $\Delta_k$. If $s_j(q)=u_j(q)$ for every $j\ne i$ and every $q$, then $s_i(q)-u_i(q)$ is constant in $q$.
 \end{lemma}
 
-For intuition, set $d(q)=s_i(q)-u_i(q)$. The entropy difference is
-$F(q)=q_i d(q)$. Lemma~\ref{lem:unique} gives
-$DF(q)[v]=v_i d(q)$. Hence $F$ is constant on every slice with fixed $q_i$,
-so $F(q)=f(q_i)$. Moving probability from any $j\ne i$ to $i$ gives
-$f'(z)=f(z)/z$. Thus $f(z)=cz$ and $d(q)=c$.
+For intuition, set $d(q)=s_i(q)-u_i(q)$. The entropy difference is $F(q)=q_i d(q)$. Lemma~\ref{lem:unique} gives $DF(q)[v]=v_i d(q)$. Hence $F$ is constant on every slice with fixed $q_i$, so $F(q)=f(q_i)$. Moving probability from any $j\ne i$ to $i$ gives $f'(z)=f(z)/z$. Thus $f(z)=cz$ and $d(q)=c$.
 
 \paragraph{Induction on the tree.}
-At the root, fix a reported distribution $q$. For outcome $i$, the remaining
-loss is a continuous proper score on the depth-$(T-1)$ continuation tree.
-To see this, choose a true joint law whose root conditional is $q$ and vary
-only the continuation reports after outcome $i$. The global properness
-inequality reduces to continuation properness multiplied by $q_i$.
-Let $B_i(q,P_i)$ be its Bayes risk when the continuation law is $P_i$.
-For every tuple $(P_1,\ldots,P_k)$, root truthfulness means that
+At the root, fix a reported distribution $q$. For outcome $i$, the remaining loss is a continuous proper score on the depth-$(T-1)$ continuation tree. To see this, choose a true joint law whose root conditional is $q$ and vary only the continuation reports after outcome $i$. The global properness inequality reduces to continuation properness multiplied by $q_i$. Let $B_i(q,P_i)$ be its Bayes risk when the continuation law is $P_i$. For every tuple $(P_1,\ldots,P_k)$, root truthfulness means that
 \begin{equation*}
  q\longmapsto (B_1(q,P_1),\ldots,B_k(q,P_k))
 \end{equation*}
-is a proper categorical loss.
-Indeed, for true root law $p$, compare the truthful tree with a tree that
-reports $q$ only at the root while retaining every truthful continuation
-$P_i$. This gives
+is a proper categorical loss. Indeed, for true root law $p$, compare the truthful tree with a tree that reports $q$ only at the root while retaining every truthful continuation $P_i$. This gives
 \begin{equation*}
  \sum_i p_i B_i(p,P_i)\leq\sum_i p_i B_i(q,P_i).
 \end{equation*}
 
-Change only $P_i$. The two root losses agree in every component except $i$,
-so Lemma~\ref{lem:shared} makes their difference independent of $q$. It
-follows that
+Change only $P_i$. The two root losses agree in every component except $i$, so Lemma~\ref{lem:shared} makes their difference independent of $q$. It follows that
 \begin{equation}
  B_i(q,P_i)=A_i(q)+K_i(P_i).
  \label{eq:bayes-separation}
 \end{equation}
-Lemma~\ref{lem:unique} now upgrades separation of Bayes risks to separation
-of the full continuation scores. The continuation score after branch $i$
-has the form $A_i(q)+D_i$, where $D_i$ is independent of the root report.
-The vector $A=(A_i)_i$ is a proper root loss, and each $D_i$ is a continuous
-proper realized-path loss on a shorter tree. Induction proves
-\eqref{eq:structure}. Initially we work with full-support laws and reports.
-Continuity extends the identity to the boundary.
+Lemma~\ref{lem:unique} now upgrades separation of Bayes risks to separation of the full continuation scores. The continuation score after branch $i$ has the form $A_i(q)+D_i$, where $D_i$ is independent of the root report. The vector $A=(A_i)_i$ is a proper root loss, and each $D_i$ is a continuous proper realized-path loss on a shorter tree. Induction proves \eqref{eq:structure}. Initially we work with full-support laws and reports. Continuity extends the identity to the boundary.
 
 The endpoint condition used in calibration gives a stronger canonical form.
 
 \begin{corollary}[Nonnegative normalization]
 \label{cor:normalize}
-Under Theorem~\ref{thm:structure}, suppose
-$C_T(x,(e_{x_t})_t)=0$ for every $x$. The representation can be chosen so
-that
+Under Theorem~\ref{thm:structure}, suppose $C_T(x,(e_{x_t})_t)=0$ for every $x$. The representation can be chosen so that
 \begin{equation}
  \ell_h(i,e_i)=0,\qquad \ell_h(i,q)\geq0
  \quad\text{for every }h,i,q.
@@ -335,34 +207,26 @@ that
 \end{equation}
 \end{corollary}
 
-Indeed, replace $\ell_h(i,q)$ by
-$\ell_h(i,q)-\ell_h(i,e_i)$. Propriety at the deterministic law $e_i$
-gives nonnegativity. Along each path, the subtracted endpoint constants sum
-to $C_T(x,(e_{x_t})_t)=0$, so the total loss is unchanged.
+Indeed, replace $\ell_h(i,q)$ by $\ell_h(i,q)-\ell_h(i,e_i)$. Propriety at the deterministic law $e_i$ gives nonnegativity. Along each path, the subtracted endpoint constants sum to $C_T(x,(e_{x_t})_t)=0$, so the total loss is unchanged.
 
 \section{A Finite-Sample Truthfulness Barrier}
 \label{sec:barrier}
 
-The canonical form imposes a quantitative restriction that is much stronger
-than asymptotic impossibility.
+The canonical form imposes a quantitative restriction that is much stronger than asymptotic impossibility.
 
 \begin{theorem}[Likelihood-ratio comparison]
 \label{thm:ratio}
-Let $C_T$ be continuous, perfectly truthful, and satisfy the endpoint
-condition in Corollary~\ref{cor:normalize}. For any interior
-$p,q\in\Delta_k$ and $X_1,\ldots,X_T\stackrel{\mathrm{iid}}\sim p$,
+Let $C_T$ be continuous, perfectly truthful, and satisfy the endpoint condition in Corollary~\ref{cor:normalize}. For any interior $p,q\in\Delta_k$ and $X_1,\ldots,X_T\stackrel{\mathrm{iid}}\sim p$,
 \begin{equation}
  \E_p C_T(X,q\1_T)
  \leq \kappa(p,q)\E_p C_T(X,p\1_T),
  \label{eq:ratio}
 \end{equation}
-where $\kappa$ is defined in \eqref{eq:kappa-intro}. The factor is independent
-of the horizon and of the history-dependent component losses.
+where $\kappa$ is defined in \eqref{eq:kappa-intro}. The factor is independent of the horizon and of the history-dependent component losses.
 \end{theorem}
 
 \begin{proof}
-Use the normalized representation of Corollary~\ref{cor:normalize}. For one
-component $\ell_h$, write
+Use the normalized representation of Corollary~\ref{cor:normalize}. For one component $\ell_h$, write
 \begin{equation*}
  H_h(p)=\sum_i p_i\ell_h(i,p),\qquad
  L_h(p,q)=\sum_i p_i\ell_h(i,q).
@@ -378,14 +242,11 @@ Nonnegativity and propriety give
 Condition on every realized history, then sum over $t$.
 \end{proof}
 
-The same argument controls fully adaptive alternatives, not only constant
-reports.
+The same argument controls fully adaptive alternatives, not only constant reports.
 
 \begin{corollary}[Process-level comparison]
 \label{cor:process}
-Let a law $P$ have interior conditional distributions $p_h$ at every
-positive-probability history. Let $R=(r_h)_h$ be any report tree with interior
-reports and define
+Let a law $P$ have interior conditional distributions $p_h$ at every positive-probability history. Let $R=(r_h)_h$ be any report tree with interior reports and define
 \begin{equation*}
  K(P,R)=\max_{h:P(h)>0}\kappa(p_h,r_h).
 \end{equation*}
@@ -395,31 +256,20 @@ Under the assumptions of Theorem~\ref{thm:ratio},
  \leq K(P,R)\E_P C_T(X,(p_{X_{<t}})_t).
  \label{eq:process-ratio}
 \end{equation}
-For binary outcomes,
-$K(P,R)=\exp(\max_{h:P(h)>0}|\operatorname{logit}(p_h)-
-\operatorname{logit}(r_h)|)$.
+For binary outcomes, $K(P,R)=\exp(\max_{h:P(h)>0}|\operatorname{logit}(p_h)- \operatorname{logit}(r_h)|)$.
 \end{corollary}
 
 \begin{proof}
-Condition on a history $h$ and apply the one-step argument in the proof of
-Theorem~\ref{thm:ratio} to $p_h,r_h$, and $\ell_h$. The resulting factor is
-at most $K(P,R)$. Average over histories and sum over time.
+Condition on a history $h$ and apply the one-step argument in the proof of Theorem~\ref{thm:ratio} to $p_h,r_h$, and $\ell_h$. The resulting factor is at most $K(P,R)$. Average over histories and sum over time.
 \end{proof}
 
-Corollary~\ref{cor:process} isolates the obstruction. A report process whose
-conditional odds remain within a fixed multiplicative factor of the truth
-cannot accumulate a score that is asymptotically larger, by more than that
-factor, than truthful sampling noise. The component losses may shrink with
-$T$ to make truthful error complete. The same comparison then forces every
-fixed interior misreport to shrink on the same scale.
+Corollary~\ref{cor:process} isolates the obstruction. A report process whose conditional odds remain within a fixed multiplicative factor of the truth cannot accumulate a score that is asymptotically larger, by more than that factor, than truthful sampling noise. The component losses may shrink with $T$ to make truthful error complete. The same comparison then forces every fixed interior misreport to shrink on the same scale.
 
-For binary outcomes, the constant is the multiplicative distance between
-the odds $a/(1-a)$ and $b/(1-b)$. It cannot be improved uniformly.
+For binary outcomes, the constant is the multiplicative distance between the odds $a/(1-a)$ and $b/(1-b)$. It cannot be improved uniformly.
 
 \begin{proposition}[Binary sharpness]
 \label{prop:sharp}
-For every distinct $a,b\in(0,1)$ and every $\epsilon>0$, there is a
-continuous normalized proper binary loss $\ell$ such that
+For every distinct $a,b\in(0,1)$ and every $\epsilon>0$, there is a continuous normalized proper binary loss $\ell$ such that
 \begin{equation}
  \frac{\E_{X\sim\operatorname{Ber}(a)}\ell(X,b)}
       {\E_{X\sim\operatorname{Ber}(a)}\ell(X,a)}
@@ -427,53 +277,31 @@ continuous normalized proper binary loss $\ell$ such that
 \end{equation}
 \end{proposition}
 
-The proof uses the standard mixture representation of binary proper losses
-\citep{gneiting2007strictly}, as reviewed by \citet{waghmare2025proper}. If
-$b>a$, concentrate a
-continuous mixing density immediately below $b$. The ratio approaches
-$b(1-a)/(a(1-b))$. The case $b<a$ is symmetric. The supplement gives the
-calculation.
+The proof uses the standard mixture representation of binary proper losses \citep{gneiting2007strictly}, as reviewed by \citet{waghmare2025proper}. If $b>a$, concentrate a continuous mixing density immediately below $b$. The ratio approaches $b(1-a)/(a(1-b))$. The case $b<a$ is symmetric. The supplement gives the calculation.
 
 We can now resolve the open exact-truthfulness question.
 
 \begin{theorem}[No continuous perfect online calibration]
 \label{thm:impossibility}
-No family of continuous sequential calibration measures can be perfectly
-truthful, complete, and sound in the sense of
-\citet{haghtalab2024truthfulness}.
+No family of continuous sequential calibration measures can be perfectly truthful, complete, and sound in the sense of \citet{haghtalab2024truthfulness}.
 \end{theorem}
 
 \begin{proof}
-Assume all three properties and choose fixed distinct $a,b\in(0,1)$.
-Completeness gives the endpoint condition needed by
-Theorem~\ref{thm:ratio} and
+Assume all three properties and choose fixed distinct $a,b\in(0,1)$. Completeness gives the endpoint condition needed by Theorem~\ref{thm:ratio} and
 \begin{equation*}
  \E_a C_T(X,a\1_T)=o_a(T).
 \end{equation*}
-The binary form of Theorem~\ref{thm:ratio} then gives
-$\E_a C_T(X,b\1_T)=o_{a,b}(T)$. Soundness requires the same quantity to be
-$\Omega_{a,b}(T)$, a contradiction.
+The binary form of Theorem~\ref{thm:ratio} then gives $\E_a C_T(X,b\1_T)=o_{a,b}(T)$. Soundness requires the same quantity to be $\Omega_{a,b}(T)$, a contradiction.
 \end{proof}
 
-The theorem permits a different metric at every horizon and arbitrary
-history-dependent scoring rules. The obstruction is not stationarity or a
-poor choice of proper score. Exact online truthfulness itself prevents a
-fixed wrong forecast from separating asymptotically faster than the truthful
-sampling loss.
+The theorem permits a different metric at every horizon and arbitrary history-dependent scoring rules. The obstruction is not stationarity or a poor choice of proper score. Exact online truthfulness itself prevents a fixed wrong forecast from separating asymptotically faster than the truthful sampling loss.
 
 \section{Why Batch Truthfulness Escapes}
 \label{sec:batch}
 
-The recent batch result of \citet{hartline2026perfect} might appear to
-conflict with Theorem~\ref{thm:impossibility}. It instead demonstrates that
-the information pattern is decisive. Their ATB measure fixes all reports
-before independent outcomes are drawn. For reports $r\in[0,1]^T$ and outcomes
-$x\in\{0,1\}^T$, it averages over a uniform threshold $z$ the sum of squared
-aggregate residuals in the two bins $[0,z)$ and $[z,1]$, normalized by
-$T^2$.
+The recent batch result of \citet{hartline2026perfect} might appear to conflict with Theorem~\ref{thm:impossibility}. It instead demonstrates that the information pattern is decisive. Their ATB measure fixes all reports before independent outcomes are drawn. For reports $r\in[0,1]^T$ and outcomes $x\in\{0,1\}^T$, it averages over a uniform threshold $z$ the sum of squared aggregate residuals in the two bins $[0,z)$ and $[z,1]$, normalized by $T^2$.
 
-For a constant report $b$, all observations lie in one bin almost surely.
-Under i.i.d. $\operatorname{Ber}(a)$ outcomes,
+For a constant report $b$, all observations lie in one bin almost surely. Under i.i.d. $\operatorname{Ber}(a)$ outcomes,
 \begin{align}
  \E_a\operatorname{ATB}_T(a\1_T,X)
  &=\frac{a(1-a)}{T},\label{eq:atb-truth}\\
@@ -481,16 +309,9 @@ Under i.i.d. $\operatorname{Ber}(a)$ outcomes,
  &=(b-a)^2+\frac{a(1-a)}{T}.
  \label{eq:atb-wrong}
 \end{align}
-Thus the wrong-to-truth ratio grows linearly in $T$. After multiplying ATB
-by $T$, \eqref{eq:atb-truth} is bounded while
-\eqref{eq:atb-wrong} is linear, exactly the separation required by the
-sequential completeness and soundness scale. Theorem~\ref{thm:ratio} says
-that no continuous perfectly truthful realized-path score can have this
-behavior online.
+Thus the wrong-to-truth ratio grows linearly in $T$. After multiplying ATB by $T$, \eqref{eq:atb-truth} is bounded while \eqref{eq:atb-wrong} is linear, exactly the separation required by the sequential completeness and soundness scale. Theorem~\ref{thm:ratio} says that no continuous perfectly truthful realized-path score can have this behavior online.
 
-The failure is visible after only two rounds. Let
-$X_1,X_2\stackrel{\mathrm{iid}}\sim\operatorname{Ber}(1/2)$. Truthful reports
-$(1/2,1/2)$ have
+The failure is visible after only two rounds. Let $X_1,X_2\stackrel{\mathrm{iid}}\sim\operatorname{Ber}(1/2)$. Truthful reports $(1/2,1/2)$ have
 \begin{equation*}
  \E\operatorname{ATB}_2((1/2,1/2),X)=\frac18.
 \end{equation*}
@@ -502,72 +323,26 @@ Direct evaluation of the two threshold bins gives
 \begin{equation*}
  \E\operatorname{ATB}_2((R_1,R_2),X)=\frac{3}{32}<\frac18.
 \end{equation*}
-The adaptive report uses the first realized residual to alter the second
-partition. Batch variance additivity remains correct because its partition
-is independent of every outcome. Online, that independence is absent.
+The adaptive report uses the first realized residual to alter the second partition. Batch variance additivity remains correct because its partition is independent of every outcome. Online, that independence is absent.
 
 \section{Related Work and Scope}
 \label{sec:related}
 
-Proper scoring rules are classically characterized by supporting hyperplanes
-of concave entropies \citep{savage1971elicitation}. See also
-\citet{gneiting2007strictly}. Modern treatments cover general elicitation and
-convex analysis \citep{frongillo2014general}. The recent review of
-\citet{waghmare2025proper} gives a broader account. Our shared-component lemma
-and tree induction use this foundation, but address a different restriction:
-each realized score sees conditional reports only along one path.
+Proper scoring rules are classically characterized by supporting hyperplanes of concave entropies \citep{savage1971elicitation}. See also \citet{gneiting2007strictly}. Modern treatments cover general elicitation and convex analysis \citep{frongillo2014general}. The recent review of \citet{waghmare2025proper} gives a broader account. Our shared-component lemma and tree induction use this foundation, but address a different restriction: each realized score sees conditional reports only along one path.
 
-\citet{dawid2012local} characterize differentiable proper scores that are
-local with respect to neighborhoods in a flat discrete outcome graph. Their
-clique decompositions do not cover hierarchical conditional coordinates, and
-their graph condition can fail even for a two-level partition. Our proof uses
-only continuity and exploits the recursive probability tree directly.
+\citet{dawid2012local} characterize differentiable proper scores that are local with respect to neighborhoods in a flat discrete outcome graph. Their clique decompositions do not cover hierarchical conditional coordinates, and their graph condition can fail even for a two-level partition. Our proof uses only continuity and exploits the recursive probability tree directly.
 
-\citet{qiao2025decision} prove a different trilemma. Their impossibility
-requires the calibration measure to lower bound downstream external regret,
-but applies to possibly discontinuous measures. Our result removes this
-decision-theoretic requirement and instead assumes continuity. Both results
-use the original sublinear base-rate completeness condition, so they cover
-different classes. In particular, ours rules out continuous exact measures
-that have no downstream-regret interpretation.
+\citet{qiao2025decision} prove a different trilemma. Their impossibility requires the calibration measure to lower bound downstream external regret, but applies to possibly discontinuous measures. Our result removes this decision-theoretic requirement and instead assumes continuity. Both results use the original sublinear base-rate completeness condition, so they cover different classes. In particular, ours rules out continuous exact measures that have no downstream-regret interpretation.
 
-Additive conditional scores appear in generative forecasting
-\citep{pacchiardi2024probabilistic}, language generation
-\citep{shao2024language}, multivariate prediction
-\citep{roordink2023scoring}, and agent trajectory uncertainty
-\citep{raghu2026agentic}. These works establish sufficiency in their settings.
-Theorem~\ref{thm:structure} proves the converse for every continuous
-realized-path score of next-outcome reports.
+Additive conditional scores appear in generative forecasting \citep{pacchiardi2024probabilistic}, language generation \citep{shao2024language}, multivariate prediction \citep{roordink2023scoring}, and agent trajectory uncertainty \citep{raghu2026agentic}. These works establish sufficiency in their settings. Theorem~\ref{thm:structure} proves the converse for every continuous realized-path score of next-outcome reports.
 
-Our result leaves two deliberate boundaries. First, it concerns perfect
-truthfulness. Constant-factor truthful measures such as SSCE remain possible
-and are not forced to be additive. Second, continuity is substantive. A
-discontinuous proper score can select different supporting hyperplanes at a
-nondifferentiable entropy, so Lemmas~\ref{lem:unique} and
-\ref{lem:shared} need not hold. Discontinuous online measures are not ruled
-out by our theorem. Common smooth and distance-based calibration measures are
-continuous, while familiar discontinuous errors such as exact-bin ECE are
-already nontruthful. Whether a useful exact measure exists through a
-discontinuous construction is open.
+Our result leaves two deliberate boundaries. First, it concerns perfect truthfulness. Constant-factor truthful measures such as SSCE remain possible and are not forced to be additive. Second, continuity is substantive. A discontinuous proper score can select different supporting hyperplanes at a nondifferentiable entropy, so Lemmas~\ref{lem:unique} and \ref{lem:shared} need not hold. Discontinuous online measures are not ruled out by our theorem. Common smooth and distance-based calibration measures are continuous, while familiar discontinuous errors such as exact-bin ECE are already nontruthful. Whether a useful exact measure exists through a discontinuous construction is open.
 
-Counterfactual access is another escape route. If an evaluator receives the
-forecaster's complete report tree, rather than only reports made along the
-realized history, it can use a general proper score for the induced joint law
-on $\cA^T$. Such a protocol asks the forecaster to specify exponentially many
-off-path probabilities and is not the sequential calibration interface
-studied here.
+Counterfactual access is another escape route. If an evaluator receives the forecaster's complete report tree, rather than only reports made along the realized history, it can use a general proper score for the induced joint law on $\cA^T$. Such a protocol asks the forecaster to specify exponentially many off-path probabilities and is not the sequential calibration interface studied here.
 
 \section{Conclusion}
 
-Continuity and realized-path locality turn exact online truthfulness into a
-rigid structural property. Every perfectly truthful measure is an additive
-proper score, and every normalized additive proper score obeys a horizon-free
-likelihood-ratio comparison. This prevents truthful sampling loss and fixed
-misreport loss from occupying the sublinear and linear scales required by
-complete and sound calibration. Perfect truthfulness is therefore achievable
-in the independent batch protocol but not in the standard continuous online
-protocol. Approximate truthfulness is not merely a limitation of current
-constructions. It is the necessary relaxation.
+Continuity and realized-path locality turn exact online truthfulness into a rigid structural property. Every perfectly truthful measure is an additive proper score, and every normalized additive proper score obeys a horizon-free likelihood-ratio comparison. This prevents truthful sampling loss and fixed misreport loss from occupying the sublinear and linear scales required by complete and sound calibration. Perfect truthfulness is therefore achievable in the independent batch protocol but not in the standard continuous online protocol. Approximate truthfulness is not merely a limitation of current constructions. It is the necessary relaxation.
 
 \bibliography{references}
 
